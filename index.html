@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<title>Para ti 💖</title>
+
+<style>
+body {
+    margin: 0;
+    overflow: hidden;
+    background: radial-gradient(circle at center, #0b0c2a, #000);
+    font-family: 'Segoe UI', sans-serif;
+    color: white;
+}
+
+/* Título */
+h1 {
+    position: absolute;
+    width: 100%;
+    text-align: center;
+    top: 20px;
+    font-size: 28px;
+    letter-spacing: 2px;
+}
+
+/* Estrellas */
+.star {
+    position: absolute;
+    width: 3px;
+    height: 3px;
+    background: white;
+    border-radius: 50%;
+    animation: twinkle 2s infinite alternate;
+}
+
+@keyframes twinkle {
+    from {opacity: 0.2;}
+    to {opacity: 1;}
+}
+
+/* Mensajes */
+.message {
+    position: absolute;
+    color: #ff8ad6;
+    font-size: 22px;
+    animation: fade 2.5s ease-out forwards;
+    pointer-events: none;
+}
+
+@keyframes fade {
+    0% {opacity: 0; transform: translateY(10px);}
+    30% {opacity: 1;}
+    100% {opacity: 0; transform: translateY(-30px);}
+}
+
+/* Botón música */
+.music-btn {
+    position: absolute;
+    bottom: 20px;
+    left: 50%;
+    transform: translateX(-50%);
+    padding: 10px 20px;
+    border: none;
+    border-radius: 20px;
+    background: #ff4fa3;
+    color: white;
+    cursor: pointer;
+}
+</style>
+</head>
+
+<body>
+
+<h1>🌌 Para ti, mi universo 💖</h1>
+
+<button class="music-btn" onclick="toggleMusic()">🎶 Música</button>
+
+<audio id="music" loop>
+    <source src="https://www.bensound.com/bensound-music/bensound-romantic.mp3" type="audio/mpeg">
+</audio>
+
+<script>
+const frases = [
+    "Eres mi estrella favorita 💖",
+    "Contigo todo brilla más ✨",
+    "Mi lugar favorito es a tu lado 🌙",
+    "Eres mi casualidad más bonita 💫",
+    "Te elegiría mil veces 🌌",
+    "Eres mi infinito ♾️",
+    "Mi universo empieza contigo 💖"
+];
+
+// Crear estrellas
+for(let i = 0; i < 120; i++){
+    let star = document.createElement("div");
+    star.className = "star";
+
+    let x = Math.random()*window.innerWidth;
+    let y = Math.random()*window.innerHeight;
+
+    star.style.left = x + "px";
+    star.style.top = y + "px";
+
+    // movimiento lento
+    setInterval(()=>{
+        star.style.top = (parseFloat(star.style.top) + 0.1) % window.innerHeight + "px";
+    }, 50);
+
+    star.onclick = function(){
+        let msg = document.createElement("div");
+        msg.className = "message";
+        msg.innerText = frases[Math.floor(Math.random()*frases.length)];
+        msg.style.left = star.style.left;
+        msg.style.top = star.style.top;
+
+        document.body.appendChild(msg);
+        setTimeout(()=>msg.remove(),2500);
+    }
+
+    document.body.appendChild(star);
+}
+
+// Música
+function toggleMusic(){
+    let music = document.getElementById("music");
+    if(music.paused){
+        music.play();
+    } else {
+        music.pause();
+    }
+}
+</script>
+
+</body>
+</html>
