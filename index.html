@@ -2,15 +2,53 @@
 <html lang="es">
 <head>
 <meta charset="UTF-8">
-<title>Para ti 💖</title>
+<title>Para Milagros 💖</title>
 
 <style>
 body {
     margin: 0;
     overflow: hidden;
-    background: radial-gradient(circle at center, #0b0c2a, #000);
     font-family: 'Segoe UI', sans-serif;
+    background: black;
+}
+
+/* Fondo galaxia generado (NUNCA falla) */
+body::before {
+    content: "";
+    position: fixed;
+    width: 100%;
+    height: 100%;
+    background:
+        radial-gradient(white 1px, transparent 1px),
+        radial-gradient(white 1px, transparent 1px),
+        radial-gradient(circle at 20% 30%, #1a1aff, transparent),
+        radial-gradient(circle at 80% 70%, #ff00cc, transparent);
+    background-size: 50px 50px, 100px 100px, 100% 100%, 100% 100%;
+    opacity: 0.6;
+    z-index: -1;
+}
+
+/* Intro */
+#startScreen {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    background: black;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    z-index: 10;
     color: white;
+}
+
+#startBtn {
+    padding: 15px 30px;
+    border-radius: 30px;
+    border: none;
+    background: pink;
+    cursor: pointer;
+    font-size: 18px;
 }
 
 /* Título */
@@ -19,8 +57,7 @@ h1 {
     width: 100%;
     text-align: center;
     top: 20px;
-    font-size: 28px;
-    letter-spacing: 2px;
+    color: white;
 }
 
 /* Estrellas */
@@ -34,102 +71,166 @@ h1 {
 }
 
 @keyframes twinkle {
-    from {opacity: 0.2;}
+    from {opacity: 0.3;}
     to {opacity: 1;}
 }
 
 /* Mensajes */
 .message {
     position: absolute;
-    color: #ff8ad6;
+    color: #ff9de6;
     font-size: 22px;
-    animation: fade 2.5s ease-out forwards;
-    pointer-events: none;
+    animation: fade 4s forwards;
 }
 
 @keyframes fade {
-    0% {opacity: 0; transform: translateY(10px);}
+    0% {opacity: 0;}
     30% {opacity: 1;}
-    100% {opacity: 0; transform: translateY(-30px);}
+    100% {opacity: 0; transform: translateY(-40px);}
 }
 
-/* Botón música */
-.music-btn {
+/* Corazones */
+.heart {
+    position: absolute;
+    font-size: 20px;
+    animation: floatUp 6s linear infinite;
+}
+
+@keyframes floatUp {
+    from {transform: translateY(100vh);}
+    to {transform: translateY(-10vh);}
+}
+
+/* Carta */
+#carta {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    background: rgba(0,0,0,0.9);
+    display: none;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    padding: 20px;
+    color: white;
+}
+
+/* contador */
+#contador {
     position: absolute;
     bottom: 20px;
-    left: 50%;
-    transform: translateX(-50%);
-    padding: 10px 20px;
-    border: none;
-    border-radius: 20px;
-    background: #ff4fa3;
+    width: 100%;
+    text-align: center;
     color: white;
-    cursor: pointer;
 }
 </style>
 </head>
 
 <body>
 
-<h1>🌌 Para ti, mi universo 💖</h1>
+<div id="startScreen">
+    <h2>💖 Milagros, esto es para ti 💖</h2>
+    <button id="startBtn">Entrar</button>
+</div>
 
-<button class="music-btn" onclick="toggleMusic()">🎶 Música</button>
+<h1>🌌 Mi universo eres tú, Milagros 💖</h1>
+<div id="contador"></div>
+
+<div id="carta">
+    <div>
+        <h2>💌 Para ti</h2>
+        <p>
+        Desde que llegaste, todo cambió.  
+        No sé si fue coincidencia o destino,  
+        pero de alguna forma te volviste  
+        lo más bonito en mi vida.  
+
+        Si esto es una galaxia…  
+        tú eres mi estrella favorita. 💖
+        </p>
+        <button onclick="cerrarCarta()">Cerrar</button>
+    </div>
+</div>
 
 <audio id="music" loop>
-    <source src="https://www.bensound.com/bensound-music/bensound-romantic.mp3" type="audio/mpeg">
+    <source src="https://cdn.pixabay.com/audio/2022/03/15/audio_6f4c9c8f58.mp3">
 </audio>
 
 <script>
 const frases = [
-    "Eres mi estrella favorita 💖",
-    "Contigo todo brilla más ✨",
-    "Mi lugar favorito es a tu lado 🌙",
-    "Eres mi casualidad más bonita 💫",
-    "Te elegiría mil veces 🌌",
+    "Milagros, te has vuelto muy especial para mí 💖",
+    "Pienso en ti 24/7 💫",
+    "Mi lugar favorito eres tú 🌙",
+    "Te elegiría mil veces 💖",
     "Eres mi infinito ♾️",
-    "Mi universo empieza contigo 💖"
+    "Tienes unos ojos hermosos ✨"
 ];
 
-// Crear estrellas
-for(let i = 0; i < 120; i++){
-    let star = document.createElement("div");
-    star.className = "star";
+// iniciar
+document.getElementById("startBtn").onclick = function(){
+    document.getElementById("startScreen").style.display = "none";
+    document.getElementById("music").play();
 
-    let x = Math.random()*window.innerWidth;
-    let y = Math.random()*window.innerHeight;
-
-    star.style.left = x + "px";
-    star.style.top = y + "px";
-
-    // movimiento lento
-    setInterval(()=>{
-        star.style.top = (parseFloat(star.style.top) + 0.1) % window.innerHeight + "px";
-    }, 50);
-
-    star.onclick = function(){
-        let msg = document.createElement("div");
-        msg.className = "message";
-        msg.innerText = frases[Math.floor(Math.random()*frases.length)];
-        msg.style.left = star.style.left;
-        msg.style.top = star.style.top;
-
-        document.body.appendChild(msg);
-        setTimeout(()=>msg.remove(),2500);
-    }
-
-    document.body.appendChild(star);
+    crearEstrellas();
+    mensajesAuto();
+    contadorTiempo();
 }
 
-// Música
-function toggleMusic(){
-    let music = document.getElementById("music");
-    if(music.paused){
-        music.play();
-    } else {
-        music.pause();
+// estrellas
+function crearEstrellas(){
+    for(let i=0;i<150;i++){
+        let s=document.createElement("div");
+        s.className="star";
+        s.style.left=Math.random()*100+"%";
+        s.style.top=Math.random()*100+"%";
+
+        s.onclick=()=>mostrarMensaje(s.style.left,s.style.top);
+        document.body.appendChild(s);
     }
+}
+
+// mensaje
+function mostrarMensaje(x,y){
+    let m=document.createElement("div");
+    m.className="message";
+    m.innerText=frases[Math.floor(Math.random()*frases.length)];
+    m.style.left=x;
+    m.style.top=y;
+    document.body.appendChild(m);
+    setTimeout(()=>m.remove(),4000);
+}
+
+// mensajes auto
+function mensajesAuto(){
+    setInterval(()=>{
+        mostrarMensaje(Math.random()*100+"%",Math.random()*100+"%");
+    },2000);
+}
+
+// corazones
+setInterval(()=>{
+    let h=document.createElement("div");
+    h.className="heart";
+    h.innerHTML="💖";
+    h.style.left=Math.random()*100+"%";
+    document.body.appendChild(h);
+    setTimeout(()=>h.remove(),6000);
+},400);
+
+// contador estilo 24/7
+function contadorTiempo(){
+    setInterval(()=>{
+        document.getElementById("contador").innerText =
+        "💖 Pienso en ti 24/7, Milagros 💖";
+    },1000);
+}
+
+// carta automática
+setTimeout(()=>{
+    document.getElementById("carta").style.display="flex";
+},20000);
+
+function cerrarCarta(){
+    document.getElementById("carta").style.display="none";
 }
 </script>
-
-</body>
-</html>
